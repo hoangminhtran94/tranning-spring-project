@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GradeController {
@@ -21,16 +22,31 @@ public class GradeController {
     }
 
     @GetMapping(value = "/")
-    public String gradeForm(Model model) {
-        model.addAttribute("grade", new Grade());
+    public String gradeForm(Model model, @RequestParam(required = false) String name) {
+        int index = getGradeIndex(name);
+        Grade grade = index < 0 ? new Grade() : studentGrades.get(index);
+        model.addAttribute("grade", grade);
         return "form";
     }
 
     @PostMapping("/handleSubmit")
     public String submitGrade(Grade grade) {
-        studentGrades.add(grade);
+        int index = getGradeIndex(grade.getName());
+        if (index < 0) {
+            studentGrades.add(grade);
+        } else {
+            studentGrades.set(index, grade);
+        }
         return "redirect:/grades";
 
+    }
+
+    public int getGradeIndex(String name) {
+        for (int i = 0; i < studentGrades.size(); i++) {
+            if (studentGrades.get(i).getName().equals(name))
+                return i;
+        }
+        return -9999;
     }
 
 }
