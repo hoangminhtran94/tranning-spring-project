@@ -4,6 +4,7 @@ public class Grade {
     private String name;
     private String subject;
     private String score;
+
     public Grade() {
     }
 
@@ -36,5 +37,10 @@ public class Grade {
     public void setName(String name) {
         this.name = name;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Grade [name=" + name + ", subject=" + subject + ", score=" + score + "]";
+    }
+
 }
