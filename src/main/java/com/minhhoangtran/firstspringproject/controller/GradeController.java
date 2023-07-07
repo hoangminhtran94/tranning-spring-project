@@ -8,24 +8,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.minhhoangtran.firstspringproject.Grade;
-import com.minhhoangtran.firstspringproject.repository.GradeRepository;
+import com.minhhoangtran.firstspringproject.service.GradeService;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class GradeController {
-    GradeRepository gradeRepository = new GradeRepository();
+    GradeService gradeService = new GradeService();
 
     @GetMapping("/grades")
     public String getGrades(Model model) {
-        model.addAttribute("grades", gradeRepository.getGrades());
+        model.addAttribute("grades", gradeService.getGrades());
         return "grades";
     }
 
     @GetMapping(value = "/")
     public String gradeForm(Model model, @RequestParam(required = false) String id) {
-        int index = gradeRepository.getGradeIndex(id);
-        Grade grade = index < 0 ? new Grade() : gradeRepository.getGrade(index);
+        Grade grade = gradeService.getGradeForm((id));
         model.addAttribute("grade", grade);
         return "form";
     }
@@ -35,12 +34,7 @@ public class GradeController {
         if (result.hasErrors())
             return "form";
 
-        int index = gradeRepository.getGradeIndex(grade.getId());
-        if (index < 0) {
-            gradeRepository.addGrade(grade);
-        } else {
-            gradeRepository.updateGrade(index, grade);
-        }
+        gradeService.submitGrade(grade);
         return "redirect:/grades";
 
     }
