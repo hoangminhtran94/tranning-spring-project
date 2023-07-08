@@ -3,9 +3,12 @@ package com.minhhoangtran.firstspringproject.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.minhhoangtran.firstspringproject.Constants;
 import com.minhhoangtran.firstspringproject.Grade;
 
+@Repository
 public class GradeRepository {
     private List<Grade> studentGrades = new ArrayList<>();
 
